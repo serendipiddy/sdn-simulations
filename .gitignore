@@ -2,3 +2,9 @@ queueinglib
 queueinglibext
 /.metadata/
 *.exe
+*.so
+*_m.h
+*_m.cc
+Makefile
+out
+.qtenv*
