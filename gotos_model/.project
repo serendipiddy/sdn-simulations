@@ -3,6 +3,7 @@
 	<name>gotos_model</name>
 	<comment></comment>
 	<projects>
+		<project>queueinglib</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
