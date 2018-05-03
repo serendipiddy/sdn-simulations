@@ -16,6 +16,10 @@ void JarschelSwitchQueue::initialize()
     Queue::initialize();
     std::cout << "HELLO" << endl;
     probability_visit_controller = registerSignal("prob_ctrl");
+    
+    arrivalSignal = registerSignal("arrival");//deepak
+    jobSignal = registerSignal("jobarrival");//deepak
+    controlsignal = registerSignal("visitcontrol");//deepak
 }
 
 /*
@@ -46,6 +50,18 @@ bool JarschelSwitchQueue::visitController(Job *job)
     }
 
     return visited;
+}
+
+void JarschelSwitchQueue::arrival(Job *job)
+{
+    Queue::arrival(job);
+    emit(arrivalSignal, 1);//deepak
+}
+
+simtime_t JarschelSwitchQueue::startService(Job *job)
+{
+    emit(jobSignal,1);//deepak
+    return Queue::startService(Job *job);
 }
 
 void JarschelSwitchQueue::endService(Job *job)

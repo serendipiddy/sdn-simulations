@@ -23,9 +23,15 @@ class JarschelSwitchQueue : public queueing::Queue
   private:
     simsignal_t toControllerSignal;
     simsignal_t toDataplaneSignal;
+    
+    simsignal_t controlsignal;//deepak
+    simsignal_t arrivalSignal;//deepak
+    simsignal_t jobSignal; //deepak
+    
     double probability_visit_controller;
   protected:
     virtual void initialize() override;
+    virtual void arrival(Job *job) override;
     // virtual void handleMessage(omnetpp::cMessage *msg) override;
     virtual void endService(Job *job) override;
 
