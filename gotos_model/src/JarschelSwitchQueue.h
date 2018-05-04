@@ -21,8 +21,8 @@ using namespace queueing;
 class JarschelSwitchQueue : public queueing::Queue
 {
   private:
-    simsignal_t toControllerSignal;
-    simsignal_t toDataplaneSignal;
+    // simsignal_t toControllerSignal;
+    simsignal_t dataplaneSignal;
     
     simsignal_t controlsignal;//deepak
     simsignal_t arrivalSignal;//deepak

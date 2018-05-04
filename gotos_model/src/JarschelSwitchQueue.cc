@@ -20,6 +20,9 @@ void JarschelSwitchQueue::initialize()
     arrivalSignal = registerSignal("arrival");//deepak
     jobSignal = registerSignal("jobarrival");//deepak
     controlsignal = registerSignal("visitcontrol");//deepak
+
+    // toControllerSignal = registerSignal("toControllerSignal");
+    dataplaneSignal = registerSignal("dataplaneSignal");
 }
 
 /*
@@ -47,6 +50,7 @@ bool JarschelSwitchQueue::visitController(Job *job)
     else
     {
         EV << "Packet won't visit controller " << rv << endl;
+        emit(dataplaneSignal,1);//deepak
     }
 
     return visited;
