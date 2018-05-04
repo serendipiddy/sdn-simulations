@@ -33,6 +33,7 @@ class JarschelSwitchQueue : public queueing::Queue
     virtual void initialize() override;
     virtual void arrival(Job *job) override;
     // virtual void handleMessage(omnetpp::cMessage *msg) override;
+    virtual simtime_t startService(Job *job) override;
     virtual void endService(Job *job) override;
 
     virtual bool visitController(Job *job);

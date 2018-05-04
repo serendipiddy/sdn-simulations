@@ -65,7 +65,7 @@ void JarschelSwitchQueue::arrival(Job *job)
 simtime_t JarschelSwitchQueue::startService(Job *job)
 {
     emit(jobSignal,1);//deepak
-    return Queue::startService(Job *job);
+    return Queue::startService(job);
 }
 
 void JarschelSwitchQueue::endService(Job *job)
