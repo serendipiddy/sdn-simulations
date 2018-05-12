@@ -1,0 +1,60 @@
+FROM ubuntu:latest
+# original: MAINTAINER Leszek Bulawa <leszekbu@gmail.com>
+LABEL Description="Docker image for Omnet++, no gui"
+# adapted by Jordan Ansell of VUW for omnetpp-5.3 and no GUI
+
+RUN apt-get update
+
+# General dependencies
+RUN apt-get install -y \
+    git \
+    wget \
+    vim \
+    build-essential \
+    gcc \
+    g++ \
+    bison \
+    flex \
+    perl \
+    libxml2-dev \
+    zlib1g-dev \
+    default-jre \
+    xvfb
+
+# QT
+RUN apt-get install -y \
+    libxml2-dev \
+    zlib1g-dev
+    
+# additonal package @ deepak 2018/05/12 start
+RUN apt-get install -y python-pip 
+
+RUN pip install \
+    numpy \
+    pandas \
+    matplotlib 
+# additonal package @ deepak 2018/05/12 end
+
+# Create working directory
+RUN mkdir -p /opt/omnetpp
+WORKDIR /opt/omnetpp
+
+# Download and extract Omnet++ source
+RUN wget https://omnetpp.org/omnetpp/send/30-omnet-releases/2327-omnetpp-5-3-core \
+    --referer=https://omnetpp.org/omnetpp \
+    -O omnetpp-5.3-src-core.tgz \
+    --progress=dot:giga \
+    && tar xf omnetpp-5.3-src-core.tgz
+
+# Set path for compilation
+ENV PATH $PATH:/opt/omnetpp/omnetpp-5.3/bin
+
+# Compile
+RUN cd omnetpp-5.3 && \
+    xvfb-run ./configure WITH_TKENV=no WITH_QTENV=no WITH_OSG=no WITH_OSGEARTH=no && \
+    make
+
+# Cleanup
+RUN apt-get clean && \
+    rm -rf /var/lib/apt && \
+    rm /opt/omnetpp/omnetpp-5.3-src-core.tgz
