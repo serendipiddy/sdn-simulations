@@ -39,13 +39,14 @@ double JarschelSwitchQueue::uniformRand(double min, double max)
  * Returns the decision variable for this job visiting the controller.
  * True means this job will visit the controller when it exits the queue
  */
-bool JarschelSwitchQueue::visitController(Job *job)
+bool JarschelSwitchQueue::checkVisitController(Job *job)
 {
     double rv = par("probVisitController").doubleValue();
-    bool visited = rv > uniformRand(0,1);
-    if (visited)
+    bool willVisit = rv > uniformRand(0,1);
+    if (willVisit)
     {
         EV << "Packet will visit controller " << rv << endl;
+        emit(dataplaneSignal,1);//deepak
     }
     else
     {
@@ -75,7 +76,7 @@ void JarschelSwitchQueue::endService(Job *job)
     simtime_t d = simTime() - job->getTimestamp();
     job->setTotalServiceTime(job->getTotalServiceTime() + d);
 
-    bool visitedController = visitController(job);
+    bool visitedController = checkVisitController(job);
     if (visitedController)
     {
         send(job, "out_controller");

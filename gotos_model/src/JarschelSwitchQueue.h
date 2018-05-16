@@ -36,7 +36,7 @@ class JarschelSwitchQueue : public queueing::Queue
     virtual simtime_t startService(Job *job) override;
     virtual void endService(Job *job) override;
 
-    virtual bool visitController(Job *job);
+    virtual bool checkVisitController(Job *job);
     virtual double uniformRand(double min, double max);
 };
 
