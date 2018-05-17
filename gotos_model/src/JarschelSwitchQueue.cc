@@ -53,7 +53,7 @@ bool JarschelSwitchQueue::checkVisitController(Job *job)
         emit(dataplaneSignal,1);//deepak
     }
 
-    return visited;
+    return willVisit;
 }
 
 void JarschelSwitchQueue::arrival(Job *job)
