@@ -14,7 +14,6 @@ Define_Module(JarschelSwitchQueue);
 void JarschelSwitchQueue::initialize()
 {
     Queue::initialize();
-    std::cout << "HELLO" << endl;
     probability_visit_controller = registerSignal("prob_ctrl");
     
     arrivalSignal = registerSignal("arrival");//deepak
