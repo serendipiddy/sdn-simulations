@@ -30,14 +30,14 @@ simple JarshelSwitchQueue extends Queue
         volatile double probVisitController;
         
         @signal[visitcontrol](type="long"); //deepak
-        @signal[jobarrival](type="long"); //deepak
-        @signal[arrival](type="long"); //deepak
+        @signal[packetservice](type="long"); //deepak
+        @signal[packetarrival](type="long"); //deepak
         
         @statistic[contcount](title="controller count"; source=count(visitcontrol); record=last,vector?); //deepak
         @statistic[dropped](title="drop event";source=count(dropped); record=last,vector?);//deepak
-        @statistic[jobcount](title="job count"; source=count(jobarrival); record=last,vector?); //deepak
-        @statistic[packetcount](title="packet count";source=count(arrival); record=last,vector?); //deepak
-        @statistic[dropRate](title="drop rate";source=count(dropped)/count(arrival); record=last,vector?);   //deepak
+        @statistic[servicecount](title="service count"; source=count(packetservice); record=last,vector?); //deepak  // job count
+        @statistic[packetcount](title="packet count";source=count(packetarrival); record=last,vector?); //deepak
+        @statistic[dropRate](title="drop rate";source=count(dropped)/count(packetservice); record=last,vector?);   //deepak
         
 //        @statistic[contcount](title="controller count"; source="visitcontrol"; record=vector,count; interpolationmode=none); //deepak  
 //        @statistic[dropCount](source=count(droppedSignal); record=last,vector?); //deepak        

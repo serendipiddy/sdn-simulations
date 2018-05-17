@@ -16,8 +16,8 @@ void JarschelSwitchQueue::initialize()
     Queue::initialize();
     probability_visit_controller = registerSignal("prob_ctrl");
     
-    arrivalSignal = registerSignal("arrival");//deepak
-    jobSignal = registerSignal("jobarrival");//deepak
+    packetArrivalSignal = registerSignal("packetarrival");//deepak  // arrival signal
+    packetServiceSignal = registerSignal("packetservice");//deepak  // job signal
     controlsignal = registerSignal("visitcontrol");//deepak
 
     // toControllerSignal = registerSignal("toControllerSignal");
@@ -45,7 +45,7 @@ bool JarschelSwitchQueue::checkVisitController(Job *job)
     if (willVisit)
     {
         EV << "Packet will visit controller " << rv << endl;
-        emit(dataplaneSignal,1);//deepak
+        emit(controlsignal,1);//deepak
     }
     else
     {
@@ -59,12 +59,12 @@ bool JarschelSwitchQueue::checkVisitController(Job *job)
 void JarschelSwitchQueue::arrival(Job *job)
 {
     Queue::arrival(job);
-    emit(arrivalSignal, 1);//deepak
+    emit(packetArrivalSignal, 1);//deepak
 }
 
 simtime_t JarschelSwitchQueue::startService(Job *job)
 {
-    emit(jobSignal,1);//deepak
+    emit(packetServiceSignal,1);//deepak
     return Queue::startService(job);
 }
 

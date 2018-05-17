@@ -25,8 +25,8 @@ class JarschelSwitchQueue : public queueing::Queue
     simsignal_t dataplaneSignal;
     
     simsignal_t controlsignal;//deepak
-    simsignal_t arrivalSignal;//deepak
-    simsignal_t jobSignal; //deepak
+    simsignal_t packetArrivalSignal;//deepak
+    simsignal_t packetServiceSignal; //deepak
     
     double probability_visit_controller;
   protected:
