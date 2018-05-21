@@ -34,7 +34,7 @@ simple JarshelSwitchQueue extends Queue
         @signal[packetarrival](type="long"); //deepak
         
         @statistic[contcount](title="controller count"; source=count(visitcontrol); record=last,vector?); //deepak
-        @statistic[dropped](title="drop event";source=count(dropped); record=last,vector?);//deepak
+        // @statistic[dropped](title="drop event";source=count(dropped); record=last,vector?);//deepak
         @statistic[servicecount](title="service count"; source=count(packetservice); record=last,vector?); //deepak  // job count
         @statistic[packetcount](title="packet count";source=count(packetarrival); record=last,vector?); //deepak
         @statistic[dropRate](title="drop rate";source=count(dropped)/count(packetservice); record=last,vector?);   //deepak
