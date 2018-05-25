@@ -15,6 +15,7 @@ void JarschelSwitchQueue::initialize()
 {
     Queue::initialize();
     probability_visit_controller = registerSignal("prob_ctrl");
+    most_recent_id_to_controller = 0;
     
     packetArrivalSignal = registerSignal("packetarrival");//deepak  // arrival signal
     packetServiceSignal = registerSignal("packetservice");//deepak  // job signal
@@ -42,8 +43,15 @@ bool JarschelSwitchQueue::checkVisitController(Job *job)
 {
     double rv = par("probVisitController").doubleValue();
     bool willVisit = rv > uniformRand(0,1);
+    if (job->getId() <= most_recent_id_to_controller)
+    {
+        willVisit = false;
+    }
+
     if (willVisit)
     {
+        most_recent_id_to_controller = job->getId();  // Improvement on Jarschel's model
+
         EV << "Packet will visit controller " << rv << endl;
         emit(controlsignal,1);//deepak
     }

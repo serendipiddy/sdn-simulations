@@ -29,6 +29,8 @@ class JarschelSwitchQueue : public queueing::Queue
     simsignal_t packetServiceSignal; //deepak
     
     double probability_visit_controller;
+    long most_recent_id_to_controller;
+
   protected:
     virtual void initialize() override;
     virtual void arrival(Job *job) override;
