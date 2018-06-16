@@ -14,15 +14,7 @@
 // 
 
 #include "FlowJob.h"
-
-//FlowJob::FlowJob() {
-//    // TODO Auto-generated constructor stub
-//
-//}
-
-//FlowJob::~FlowJob() {
-//    // TODO Auto-generated destructor stub
-//}
+namespace queueing {
 
 long FlowJob::getFlowID() {
     return flowID;
@@ -31,3 +23,5 @@ long FlowJob::getFlowID() {
 void FlowJob::setFlowID(long id) {
     flowID = id;
 }
+
+}; //namespace

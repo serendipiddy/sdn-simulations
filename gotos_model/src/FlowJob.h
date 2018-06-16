@@ -18,14 +18,19 @@
 
 #include "Job.h"
 
-class FlowJob: public queueing::Job {
+namespace queueing {
+
+class FlowJob: public Job {
 public:
-    FlowJob();
-//    virtual ~FlowJob();
+    FlowJob(const char *name=nullptr, int kind=0, JobList *table=nullptr) : Job(name, kind, table) { };
+    FlowJob(const Job& job) : Job(job) { };
+
     long getFlowID();
     void setFlowID(long id);
 private:
     long flowID;
 };
+
+}; //namespace
 
 #endif /* FLOWJOB_H_ */
