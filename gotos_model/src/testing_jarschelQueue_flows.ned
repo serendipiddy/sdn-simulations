@@ -35,12 +35,12 @@ network TestingJarschelQueueFlows
         sink: Sink {
             @display("p=335,125");
         }
-        jarshelSwitchQueue: JarshelSwitchQueue {
+        flowSwitchQueue: FlowSwitchQueue {
             @display("p=193,125");
         }
     connections:
-        source.out --> jarshelSwitchQueue.in++;
-        jarshelSwitchQueue.out --> sink.in++;
-        jarshelSwitchQueue.out_controller --> queue1.in++;
-        queue1.out --> jarshelSwitchQueue.in++;
+        source.out --> flowSwitchQueue.in++;
+        flowSwitchQueue.out --> sink.in++;
+        flowSwitchQueue.out_controller --> queue1.in++;
+        queue1.out --> flowSwitchQueue.in++;
 }
