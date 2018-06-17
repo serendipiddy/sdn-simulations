@@ -10,9 +10,16 @@
 
 #include <omnetpp.h>
 #include "Queue.h"
+#include "FlowJob.h"
 #include "QueueingDefs.h"
 
 using namespace queueing;
+
+class FlowIDElem : public cObject {
+    public:
+        FlowIDElem(long id) : cObject(){};
+        long id;
+};
 
 /**
  * FlowSwitchQueue module that splits outgoing traffic between two output ports, given a flow ID in the traffic - sending the first packet from each flow to the controller exactly once.
@@ -25,8 +32,8 @@ class FlowSwitchQueue : public queueing::Queue
     simsignal_t packetArrivalSignal;
     simsignal_t packetServiceSignal;
     
-    double probability_visit_controller;
     long most_recent_id_to_controller;
+    cArray missingIDs;
 
   protected:
     virtual void initialize() override;
@@ -36,7 +43,6 @@ class FlowSwitchQueue : public queueing::Queue
     virtual void endService(Job *job) override;
 
     virtual bool checkVisitController(Job *job);
-    virtual double uniformRand(double min, double max);
 };
 
 #endif /* FLOWSWITCHQUEUE_H_ */

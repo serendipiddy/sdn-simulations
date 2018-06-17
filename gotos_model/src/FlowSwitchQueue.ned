@@ -26,7 +26,6 @@ simple FlowSwitchQueue extends Queue
 {        
     parameters:
         @class(FlowSwitchQueue);
-        volatile double probVisitController;
         
         @signal[visitcontrol](type="long");
         @signal[packetservice](type="long");
