@@ -26,6 +26,17 @@ private:
     long flowCounter;
     simtime_t startTime;
     simtime_t stopTime;
+
+    long avgFlowPacketCount;
+    double avgFlowDuration;
+    double avgFlowInterarrival;
+
+    // Names of cMessage parameters
+    const char* flowPacketsRemainingPar = "flowPacketsRemaining";
+    const char* flowDeadlinePar = "flowDeadlineLeft";
+    const char* newFlowPar = "newFlow";
+    const char* flowIDPar = "flowID";
+
     int numJobs;
 protected:
     virtual void initialize() override;
@@ -33,6 +44,7 @@ protected:
     virtual void handleMessage(cMessage *msg) override;
 private:
     long getNextFlowID();
+    cMessage* getNewFlow();
 };
 
 }; //namespace
