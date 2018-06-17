@@ -8,3 +8,4 @@ queueinglibext
 Makefile
 out
 .qtenv*
+gotos_model/.settings/language.settings.xml
