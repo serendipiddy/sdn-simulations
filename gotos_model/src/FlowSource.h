@@ -19,7 +19,7 @@
 #include "Source.h"
 #include "FlowJob.h"
 
-namespace queueing {
+using namespace queueing;
 
 class FlowSource: public queueing::SourceBase {
 private:
@@ -27,9 +27,13 @@ private:
     simtime_t startTime;
     simtime_t stopTime;
 
-    long avgFlowPacketCount;
-    double avgFlowDuration;
-    double avgFlowInterarrival;
+    simsignal_t flowBeginSignal;
+    simsignal_t flowEndSignal;
+
+    /* These could be set here to have constant values throughout the simulation. But that's boring */
+//    long avgFlowPacketCount;
+//    double avgFlowDuration;
+//    double avgFlowInterarrival;
 
     // Names of cMessage parameters
     const char* flowPacketsRemainingPar = "flowPacketsRemaining";
@@ -44,9 +48,9 @@ protected:
     virtual void handleMessage(cMessage *msg) override;
 private:
     long getNextFlowID();
-    cMessage* getNewFlow();
+    void createNewFlow(double startTime);
 };
 
-}; //namespace
+// }; //namespace
 
 #endif /* FLOWSOURCE_H_ */

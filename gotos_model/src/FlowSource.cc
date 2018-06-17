@@ -15,7 +15,7 @@
 
 #include "FlowSource.h"
 
-namespace queueing {
+Define_Module(FlowSource);
 
 void FlowSource::initialize()
 {
@@ -24,39 +24,44 @@ void FlowSource::initialize()
     stopTime = par("stopTime");
     numJobs = par("numJobs");
 
-    avgFlowInterarrival = 5;  // par("flowInterarrival");
-    avgFlowPacketCount = 10;  // par("flowCount");
-    avgFlowDuration = 5;  // par("flowDuration");
+    flowBeginSignal = registerSignal("flowbegin");
+    flowEndSignal = registerSignal("flowend");
+
+//    avgFlowInterarrival = 5;  // par("flowInterarrival");
+//    avgFlowPacketCount = par("flowCount").longValue();
+//    avgFlowDuration = par("flowDuration").doubleValue();
 
     flowCounter = 0;
 
     // schedule the first message timer for start time
-    cMessage* firstFlow = getNewFlow();  // new cMessage("newJobTimer"));
+    createNewFlow(startTime.dbl());
 }
 
 /*
  * Creates a pointer to a new flow message, responsible for controlling the
  * lifetime and packet generation for that flow
  */
-cMessage* FlowSource::getNewFlow() {
+void FlowSource::createNewFlow(double startTime) {
     cMessage* newFlow = new cMessage("flowTimer");
 
-    cMsgPar* packets = new cMsgPar(flowPacketsRemainingPar);
+    cMsgPar* packetsLeft = new cMsgPar(flowPacketsRemainingPar);
     cMsgPar* deadline = new cMsgPar(flowDeadlinePar);
     cMsgPar* isNewFlow = new cMsgPar(newFlowPar);
-    cMsgPar* flowID = new cMsgPar(flowIDPar);
+    cMsgPar* msgFlowID = new cMsgPar(flowIDPar);
 
-    packets->setLongValue(avgFlowPacketCount);
-    deadline->setDoubleValue(simTime().dbl() + avgFlowDuration);
+    packetsLeft->setLongValue( par("flowPacketCount") );
+    deadline->setDoubleValue( startTime + par("flowDuration").doubleValue() );
     isNewFlow->setBoolValue(true);
-    flowID->setLongValue(getNextFlowID());
+    msgFlowID->setLongValue(getNextFlowID());
 
-    newFlow->addPar(packets);
+    newFlow->addPar(packetsLeft);
     newFlow->addPar(deadline);
     newFlow->addPar(isNewFlow);
+    newFlow->addPar(msgFlowID);
 
-
-    return newFlow;
+//    std::cout << "NEW flow " << msgFlowID->longValue() << ": pkts " << packetsLeft->longValue() << ", time left " << deadline->doubleValue()-startTime << endl;
+    emit(flowBeginSignal, msgFlowID->longValue());
+    scheduleAt(startTime, newFlow);
 }
 
 void FlowSource::handleMessage(cMessage *msg)
@@ -78,16 +83,19 @@ void FlowSource::handleMessage(cMessage *msg)
 
         // if it's a new flow, schedule next flow message to start circulating
         if (isNewFlow->boolValue()) {
-            scheduleAt(simTime().dbl() + avgFlowInterarrival, getNewFlow());  // schedule flow message  // TODO par("flowInterarrival")
+            createNewFlow(simTime().dbl() + par("flowInterarrival").doubleValue());
             isNewFlow->setBoolValue(false);
         }
 
+//        std::cout << "flow " << msgFlowID->longValue() << ": pkts " << packetsLeft->longValue() << ", time left " << deadline->doubleValue()-simTime().dbl() << endl;
         // check count and timer are > 0, else delete flow message (ending the flow life)
         if (packetsLeft->longValue() <= 0 || deadline->doubleValue() <= simTime().dbl() ) {
-            // emit that the flow is now dead?
+//            std::cout << "KILLING FLOW " << msgFlowID->longValue() << endl;
+            emit(flowEndSignal, msgFlowID->longValue());
             delete msg;
             return;
         }
+
 
         // decrement flow packet count and flow duration timer
         packetsLeft->setLongValue(packetsLeft->longValue() - 1);
@@ -98,6 +106,8 @@ void FlowSource::handleMessage(cMessage *msg)
         // send the current message
         FlowJob *job = (FlowJob*) createJob();
         job->setFlowID(msgFlowID->longValue());
+
+
         send(job, "out");
     }
     else {
@@ -122,7 +132,3 @@ queueing::Job *FlowSource::createJob() {
     job->setFlowID(jobCounter);
     return job;
 }
-
-Define_Module(FlowSource);
-
-}; //namespace
