@@ -106,7 +106,7 @@ void FlowSource::handleMessage(cMessage *msg)
         // send the current message
         FlowJob *job = (FlowJob*) createJob();
         job->setFlowID(msgFlowID->longValue());
-
+//        std::cout << "new packet FLOW ID" << job->getFlowID() << endl;
 
         send(job, "out");
     }

@@ -10,13 +10,9 @@
 
 Define_Module(FlowSwitchQueue);
 
-FlowIDElem::FlowIDElem(long id) {
-    id = id;
-}
-
 void FlowSwitchQueue::initialize() {
     Queue::initialize();
-    most_recent_id_to_controller = 0;
+    most_recent_id_to_controller = -1;
     
     packetArrivalSignal = registerSignal("packetarrival"); // arrival signal
     packetServiceSignal = registerSignal("packetservice"); // job signal
@@ -35,17 +31,21 @@ bool FlowSwitchQueue::checkVisitController(Job *jjob) {
     FlowIDElem* thisIDElem = new FlowIDElem(job->getFlowID());
 
     if (thisIDElem->id > most_recent_id_to_controller) {
+
+//        std::cout << "NEW flow " << thisIDElem->id << " (> most recent) " << endl;
         // record any flows that are missing
         for (long i = most_recent_id_to_controller+1; i < thisIDElem->id; i++) {
+//            std::cout << "  Missing flows " << i << endl;
             FlowIDElem* id = new FlowIDElem(i);
-            if (!missingIDs.exist(id)) {
+            if (!missingIDs.exist(missingIDs.find(id))) {
                 missingIDs.add(id);
             }
         }
         most_recent_id_to_controller = thisIDElem->id;
         willVisit = true;
     }
-    else if (missingIDs.exist(thisIDElem)) {
+    else if (missingIDs.exist(missingIDs.find(thisIDElem))) {
+//        std::cout << "NEW flow " << thisIDElem->id << " (in missing) " << endl;
         missingIDs.remove(thisIDElem);
         willVisit = true;
     }

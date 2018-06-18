@@ -17,7 +17,7 @@ using namespace queueing;
 
 class FlowIDElem : public cObject {
     public:
-        FlowIDElem(long id) : cObject(){};
+        FlowIDElem(long idin) : cObject(){id = idin;};
         long id;
 };
 
